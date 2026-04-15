@@ -1,0 +1,68 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --font-bebas: "Bebas Neue", sans-serif;
+  --font-barlow: "Barlow Condensed", sans-serif;
+  --font-dm: "DM Sans", sans-serif;
+  --color-axon-accent: #3b82f6;
+}
+
+:root.dark {
+  --axon-bg: #080808;
+  --axon-surface: #111111;
+  --axon-text: #f5f5f5;
+  --axon-muted: rgb(245 245 245 / 0.5);
+  --axon-footer: #050505;
+  --axon-overlay: rgb(0 0 0 / 0.55);
+  --axon-card-border: rgb(245 245 245 / 0.08);
+  --axon-map-tiles: https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png;
+}
+
+:root.light {
+  --axon-bg: #f5f5f5;
+  --axon-surface: #ebebeb;
+  --axon-text: #080808;
+  --axon-muted: rgb(8 8 8 / 0.5);
+  --axon-footer: #e0e0e0;
+  --axon-overlay: rgb(0 0 0 / 0.35);
+  --axon-card-border: rgb(8 8 8 / 0.1);
+  --axon-map-tiles: https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png;
+}
+
+html,
+body,
+#root {
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  background-color: var(--axon-bg);
+  color: var(--axon-text);
+  font-family: var(--font-dm);
+  font-weight: 300;
+  -webkit-font-smoothing: antialiased;
+  transition:
+    background-color 0.4s ease,
+    color 0.4s ease,
+    border-color 0.4s ease;
+}
+
+/* Leaflet z-index below modals */
+.leaflet-container {
+  z-index: 0;
+  font-family: var(--font-dm);
+  background: var(--axon-surface);
+}
+
+.leaflet-popup-content-wrapper {
+  border-radius: 2px;
+  background: var(--axon-surface);
+  color: var(--axon-text);
+}
+
+.leaflet-popup-tip {
+  background: var(--axon-surface);
+}
