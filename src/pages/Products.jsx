@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import { useSearchParams } from 'react-router-dom'
+import { useSearchParams, Link } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { productsCatalog, productsHeroImg } from '../data/media'
 
@@ -15,8 +15,8 @@ export default function Products() {
   const active = searchParams.get('cat') || 'all'
 
   const filtered = useMemo(() => {
-    if (active === 'all') return productsCatalog
-    return productsCatalog.filter((p) => p.category === active)
+    if (!active || active === 'all') return productsCatalog
+    return productsCatalog.filter((p) => p.category.toLowerCase() === active.toLowerCase())
   }, [active])
 
   const setFilter = (id) => {
@@ -27,32 +27,21 @@ export default function Products() {
   return (
     <>
       <section className="relative flex min-h-[55vh] items-end overflow-hidden md:min-h-[62vh]">
-        <img
-          src={productsHeroImg}
-          alt=""
-          className="absolute inset-0 h-full w-full object-cover"
-          loading="eager"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-black/25 to-black/15" />
+        <img src={productsHeroImg} alt="" className="absolute inset-0 h-full w-full object-cover" />
+        <div className="absolute inset-0 bg-black/40" />
         <div className="relative z-10 w-full px-4 pb-16 pt-32 md:px-10 md:pb-20">
-          <h1 className="font-[family-name:var(--font-bebas)] text-[clamp(3.5rem,12vw,8rem)] tracking-[0.1em] text-white">
-            PRODUCTS
-          </h1>
+          <h1 className="font-[family-name:var(--font-bebas)] text-[clamp(3.5rem,12vw,8rem)] text-white">PRODUCTS</h1>
         </div>
       </section>
 
-      <section className="border-b border-[var(--axon-card-border)] bg-[var(--axon-bg)] px-4 py-8 md:px-10">
-        <div className="mx-auto flex max-w-[1600px] flex-wrap gap-3">
+      <section className="bg-[var(--axon-bg)] px-4 py-8 md:px-10 border-b border-[var(--axon-card-border)]">
+        <div className="mx-auto flex max-w-[1600px] gap-3 flex-wrap">
           {filters.map((f) => (
             <button
               key={f.id}
-              type="button"
               onClick={() => setFilter(f.id)}
-              className={`rounded-[2px] border px-6 py-2.5 font-[family-name:var(--font-barlow)] text-xs uppercase tracking-[0.22em] transition ${
-                active === f.id
-                  ? 'border-[#3B82F6] bg-[#3B82F6] text-white'
-                  : 'border-[var(--axon-card-border)] text-[var(--axon-text)] hover:border-[#3B82F6] hover:text-[#3B82F6]'
-              }`}
+              className={`px-6 py-2.5 text-xs uppercase tracking-widest transition border ${active === f.id ? 'bg-[#3B82F6] border-[#3B82F6] text-white' : 'border-[var(--axon-card-border)] text-white'
+                }`}
             >
               {f.label}
             </button>
@@ -60,59 +49,46 @@ export default function Products() {
         </div>
       </section>
 
-      <section className="bg-[var(--axon-bg)] px-4 py-16 md:px-10 md:py-24">
-        <motion.div layout className="mx-auto grid max-w-[1600px] gap-10 sm:grid-cols-2 lg:grid-cols-3">
+      <section className="bg-[var(--axon-bg)] px-4 py-16 md:px-10">
+        <div className="mx-auto grid max-w-[1600px] gap-10 sm:grid-cols-2 lg:grid-cols-3">
           <AnimatePresence mode="popLayout">
             {filtered.map((p) => (
               <motion.article
                 key={p.id}
                 layout
-                initial={{ opacity: 0, scale: 0.98 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.98 }}
-                transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-                whileHover={{ y: -6 }}
-                className="group overflow-hidden rounded-[3px] border border-[var(--axon-card-border)] bg-[var(--axon-surface)] shadow-[0_16px_50px_rgba(0,0,0,0.08)]"
+                className="group relative overflow-hidden rounded-[4px] border border-[var(--axon-card-border)] bg-[var(--axon-surface)]"
               >
                 <div className="relative aspect-[3/4] overflow-hidden">
                   <img
                     src={p.img}
                     alt=""
-                    className="h-full w-full object-cover transition duration-[1.15s] group-hover:scale-105"
-                    loading="lazy"
+                    className="h-full w-full object-cover transition duration-700 group-hover:scale-110"
                   />
-                  <div className="absolute inset-0 bg-black/0 transition duration-500 group-hover:bg-black/40" />
-                  <div className="absolute inset-0 flex items-center justify-center opacity-0 transition duration-400 group-hover:opacity-100">
-                    <span className="rounded-[2px] border border-white/90 bg-white/10 px-6 py-2.5 font-[family-name:var(--font-barlow)] text-xs uppercase tracking-[0.2em] text-white backdrop-blur-sm">
-                      Quick View
+
+                  {/* THE DARK OVERLAY */}
+                  <div className="absolute inset-0 bg-black/0 transition-all duration-300 group-hover:bg-black/50" />
+
+                  {/* THE BUTTON: Using 'z-50' to force it to the very front */}
+                  <Link
+                    to="/contact"
+                    className="absolute left-1/2 top-1/2 z-[60] -translate-x-1/2 translate-y-10 opacity-0 transition-all duration-500 group-hover:translate-y-[-50%] group-hover:opacity-100"
+                  >
+                    <span className="block bg-white text-black px-8 py-3 text-[10px] uppercase tracking-[0.3em] font-bold shadow-[0_10px_30px_rgba(0,0,0,0.5)] whitespace-nowrap">
+                      Buy Now
                     </span>
-                  </div>
+                  </Link>
                 </div>
-                <div className="p-5">
-                  <p className="mb-1 font-[family-name:var(--font-barlow)] text-xs uppercase tracking-[0.25em] text-[var(--axon-muted)]">
-                    {p.category}
-                  </p>
-                  <div className="flex items-end justify-between gap-3">
-                    <h2 className="font-[family-name:var(--font-barlow)] text-lg uppercase tracking-[0.1em] text-[var(--axon-text)]">
-                      {p.name}
-                    </h2>
-                    <span className="font-[family-name:var(--font-barlow)] text-base text-[#3B82F6]">
-                      {p.price}
-                    </span>
+
+                <div className="p-6">
+                  <p className="text-[#3B82F6] text-[10px] uppercase tracking-[0.3em] mb-2">{p.category}</p>
+                  <div className="flex justify-between items-center">
+                    <h2 className="text-white uppercase text-lg tracking-wider">{p.name}</h2>
+                    <span className="text-white/60 font-medium">{p.price}</span>
                   </div>
                 </div>
               </motion.article>
             ))}
           </AnimatePresence>
-        </motion.div>
-
-        <div className="mx-auto mt-16 flex max-w-[1600px] justify-center">
-          <button
-            type="button"
-            className="rounded-[2px] border border-[#3B82F6] px-10 py-3 font-[family-name:var(--font-barlow)] text-sm uppercase tracking-[0.2em] text-[#3B82F6] transition hover:bg-[#3B82F6] hover:text-white"
-          >
-            Load More
-          </button>
         </div>
       </section>
     </>

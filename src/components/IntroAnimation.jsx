@@ -14,13 +14,16 @@ export default function IntroAnimation() {
   useLayoutEffect(() => {
     if (!run) return
 
-    // Do not animate shell opacity: the overlay fully covers the app. Under React StrictMode,
-    // gsap.context().revert() could otherwise leave the shell stuck at opacity: 0 (blank page).
+    // FORCE SNAP TO TOP AND LOCK SCROLL
+    window.scrollTo(0, 0)
+    document.body.style.overflow = 'hidden'
 
     const ctx = gsap.context(() => {
       const tl = gsap.timeline({
         onComplete: () => {
           sessionStorage.setItem(SESSION_KEY, '1')
+          // RE-ENABLE SCROLLING WHEN DONE
+          document.body.style.overflow = 'auto'
           setRun(false)
         },
       })
@@ -36,7 +39,11 @@ export default function IntroAnimation() {
       tl.to(rootRef.current, { opacity: 0, duration: 1.5, ease: 'power2.inOut' }, '>')
     }, rootRef)
 
-    return () => ctx.revert()
+    return () => {
+      // CLEANUP: Ensure body isn't stuck locked if user leaves early
+      document.body.style.overflow = 'auto'
+      ctx.revert()
+    }
   }, [run])
 
   if (!run) return null
@@ -48,18 +55,10 @@ export default function IntroAnimation() {
       aria-hidden="true"
     >
       <div className="flex items-end justify-center gap-[0.12em] px-6 font-[family-name:var(--font-bebas)] text-[min(18vw,8rem)] leading-none tracking-[0.2em]">
-        <span ref={aRef} className="text-[#3B82F6]">
-          A
-        </span>
-        <span ref={xRef} className="text-white">
-          X
-        </span>
-        <span ref={oRef} className="text-white">
-          O
-        </span>
-        <span ref={nRef} className="text-white">
-          N
-        </span>
+        <span ref={aRef} className="text-[#3B82F6]">A</span>
+        <span ref={xRef} className="text-white">X</span>
+        <span ref={oRef} className="text-white">O</span>
+        <span ref={nRef} className="text-white">N</span>
       </div>
     </div>
   )
