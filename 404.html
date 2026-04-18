@@ -1,14 +1,14 @@
 <!doctype html>
 <html lang="en">
-  <head>
+
+<head>
     <meta charset="UTF-8" />
     <script>
-      var path = window.location.pathname;
-      var base = '/axon-website';
-      var route = path.replace(base, '') || '/';
-      sessionStorage.setItem('redirect-path', route);
-      window.location.replace(window.location.origin + base + '/');
+        sessionStorage.setItem('redirect-path', window.location.href);
+        window.location.replace('https://victoryvincent509-arch.github.io/axon-website/');
     </script>
-  </head>
-  <body></body>
+</head>
+
+<body></body>
+
 </html>

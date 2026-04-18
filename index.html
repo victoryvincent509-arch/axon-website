@@ -16,7 +16,7 @@
     var redirect = sessionStorage.getItem('redirect-path');
     if (redirect) {
       sessionStorage.removeItem('redirect-path');
-      window.history.replaceState(null, '', '/axon-website' + redirect);
+      window.history.replaceState(null, '', redirect);
     }
   </script>
   <script type="module" crossorigin src="/axon-website/assets/index-C8Uj9wnc.js"></script>
