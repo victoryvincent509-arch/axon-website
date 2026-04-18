@@ -1,0 +1,14 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <script>
+      var path = window.location.pathname;
+      var base = '/axon-website';
+      var route = path.replace(base, '') || '/';
+      sessionStorage.setItem('redirect-path', route);
+      window.location.replace(window.location.origin + base + '/');
+    </script>
+  </head>
+  <body></body>
+</html>
